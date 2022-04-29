@@ -17,7 +17,18 @@ exports.insertBudget = async (request, response) => {
       category,
       date,
     });
-    response.send(budget);
+    response.send({ message: "Budget successful save" });
+  } catch (error) {
+    response.status(500).send({
+      message: error.message,
+    });
+  }
+};
+
+exports.getAllBudgets = async (request, response) => {
+  try {
+    const budgets = await Budget.findAll();
+    response.send(budgets);
   } catch (error) {
     response.status(500).send({
       message: error.message,

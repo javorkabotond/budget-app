@@ -1,1 +1,1 @@
-# budget-app
+# Budget App

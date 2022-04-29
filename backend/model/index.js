@@ -21,5 +21,5 @@ const sequelize = new Sequelize(
 );
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
-db.tutorials = require("./budgetModel")(sequelize, Sequelize);
+db.budget = require("./budgetModel")(sequelize, Sequelize);
 module.exports = db;

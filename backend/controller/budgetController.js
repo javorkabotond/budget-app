@@ -43,7 +43,33 @@ exports.getBudgetById = async (request, response) => {
     response.send({ budget: budget });
   } catch (error) {
     response.status(404).send({
-      message: `Cannot find budget with id=${request.params.id}.`,
+      message: `Cannot find budget with id: ${id}.`,
+    });
+  }
+};
+
+exports.deleteBudget = async (request, response) => {
+  try {
+    const id = request.params.id;
+    const findBudgetById = await Budget.findByPk(id);
+    if (!findBudgetById) {
+      response.status(404).send({
+        message: `Budget with id: ${id} not found`,
+      });
+      return;
+    }
+
+    const deleteBerons = findBudgetById.destroy();
+    if (!deleteBerons) {
+      response.status(404).send({
+        message: `Budget with id: ${id} not found`,
+      });
+      return;
+    }
+    response.send({ message: "Budget successful delete" });
+  } catch (error) {
+    response.status(500).send({
+      message: "Could not delete budget with id:" + id,
     });
   }
 };

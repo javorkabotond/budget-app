@@ -28,10 +28,22 @@ exports.insertBudget = async (request, response) => {
 exports.getAllBudgets = async (request, response) => {
   try {
     const budgets = await Budget.findAll();
-    response.send(budgets);
+    response.send({ budgets: budgets });
   } catch (error) {
     response.status(500).send({
       message: error.message,
+    });
+  }
+};
+
+exports.getBudgetById = async (request, response) => {
+  try {
+    const id = request.params.id;
+    const budget = await Budget.findByPk(id);
+    response.send({ budget: budget });
+  } catch (error) {
+    response.status(404).send({
+      message: `Cannot find budget with id=${request.params.id}.`,
     });
   }
 };

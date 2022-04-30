@@ -28,7 +28,7 @@ exports.insertBudget = async (request, response) => {
 exports.getAllBudgets = async (request, response) => {
   try {
     const budgets = await Budget.findAll();
-    response.send({ budgets: budgets });
+    response.send(budgets);
   } catch (error) {
     response.status(500).send({
       message: error.message,

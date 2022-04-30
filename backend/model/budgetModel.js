@@ -11,7 +11,7 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
       },
       category: {
-        type: Sequelize.ENUM("SHOP", "TRANSFER", "OTHER"),
+        type: Sequelize.ENUM("SHOP", "TRANSFER", "OTHER", "ALL"),
         allowNull: false,
       },
       amount: {

@@ -1,5 +1,7 @@
+const { request } = require("express");
 const db = require("../model");
 const Budget = db.budget;
+const Op = db.Sequelize.Op;
 
 exports.insertBudget = async (request, response) => {
   try {
@@ -43,10 +45,46 @@ exports.getBudgetById = async (request, response) => {
     response.send({ budget: budget });
   } catch (error) {
     response.status(404).send({
-      message: `Cannot find budget with id: ${id}.`,
+      message: `Cannot find budget with id: .`,
     });
   }
 };
+
+exports.getBudgetsByCondition = async (request, response) => {
+  try {
+    const title = request.query.title;
+    const category = request.query.category;
+    if (category === "ALL") {
+      try {
+        const budgets = await Budget.findAll();
+        response.send(budgets);
+      } catch (error) {
+        response.status(500).send({
+          message: error.message,
+        });
+      }
+      return;
+    }
+    const titleCondition = title
+      ? { title: { [Op.like]: `%${title}%` } }
+      : null;
+    const categoryCondition = category
+      ? { category: { [Op.eq]: category } }
+      : null;
+
+    const budgets = await Budget.findAll({
+      where: {
+        [Op.and]: [titleCondition, categoryCondition],
+      },
+    });
+    response.status(200).send(budgets);
+  } catch (error) {
+    response.status(500).send({
+      message: `Cannot find budget.`,
+    });
+  }
+};
+
 exports.updateBudget = async (request, response) => {
   const id = request.params.id;
   const { title, descreption, amount, category, date } = request.body;

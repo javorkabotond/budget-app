@@ -1,7 +1,7 @@
-const { request } = require("express");
 const db = require("../model");
 const Budget = db.budget;
-const Op = db.Sequelize.Op;
+const Op = db.Sequelize;
+const sequelize = db.sequelize;
 
 exports.insertBudget = async (request, response) => {
   try {
@@ -38,6 +38,23 @@ exports.getAllBudgets = async (request, response) => {
   }
 };
 
+exports.getAllBudgetsByCategory = async (request, response) => {
+  try {
+    const budgets = await Budget.findAll({
+      attributes: [
+        "category",
+        [sequelize.fn("SUM", sequelize.col("amount")), "total_amount"],
+      ],
+      group: "category",
+    });
+    response.send(budgets);
+  } catch (error) {
+    response.status(500).send({
+      message: error.message,
+    });
+  }
+};
+
 exports.getBudgetById = async (request, response) => {
   try {
     const id = request.params.id;
@@ -54,7 +71,8 @@ exports.getBudgetsByCondition = async (request, response) => {
   try {
     const title = request.query.title;
     const category = request.query.category;
-    if (category === "ALL") {
+    console.log(typeof title);
+    if ((!title || title) && category === "ALL") {
       try {
         const budgets = await Budget.findAll();
         response.send(budgets);

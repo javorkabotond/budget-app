@@ -8,6 +8,9 @@ export default {
   getById(id) {
     return http.get(`/budget/${id}`);
   },
+  getByCategory() {
+    return http.get(`/budgets/category`);
+  },
   search(query) {
     return http.get(`/budgets/search`, {
       params: {

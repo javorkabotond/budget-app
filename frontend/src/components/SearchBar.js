@@ -7,9 +7,31 @@ import {
   FormControl,
   InputLabel,
   Button,
+  Grid,
+  Container,
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+
+const categories = [
+  {
+    name: "None",
+    value: "",
+  },
+  {
+    name: "Shop",
+    value: "SHOP",
+  },
+  {
+    name: "Transfer",
+    value: "TRANSFER",
+  },
+  {
+    name: "Other",
+    value: "OTHER",
+  },
+];
+
 export const SearchBar = ({ onBudgetChange }) => {
   const [selectCategory, setSelectCategory] = useState("");
   const [selectTitle, setSelectTitle] = useState("");
@@ -28,43 +50,52 @@ export const SearchBar = ({ onBudgetChange }) => {
     }
   };
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        "& > :not(style)": { m: 1 },
-      }}
-    >
-      <TextField
-        label="Title"
-        value={selectTitle}
-        onChange={handleSelectTitle}
-      />
-      <FormControl sx={{ minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-label">Category</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={selectCategory}
-          label="Category"
-          onChange={handleSelectCategory}
-        >
-          <MenuItem value={"ALL"}>All</MenuItem>;
-          <MenuItem value={"SHOP"}>Shop</MenuItem>;
-          <MenuItem value={"TRANSFER"}>Transfer</MenuItem>;
-          <MenuItem value={"OTHER"}>Other</MenuItem>;
-        </Select>
-      </FormControl>
-
-      <Button
-        size="large"
-        variant="contained"
-        onClick={handleClickSearchButton}
-      >
-        <FontAwesomeIcon icon={faMagnifyingGlass} />
-        Search
-      </Button>
-    </Box>
+    <Container maxWidth="xl">
+      <Box sx={{ mb: 1 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={8}>
+            <FormControl fullWidth>
+              <TextField
+                fullWidth
+                label="Title"
+                value={selectTitle}
+                onChange={handleSelectTitle}
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-filled-label">
+                Category
+              </InputLabel>
+              <Select
+                id="demo-simple-select-filled-label"
+                value={selectCategory}
+                onChange={handleSelectCategory}
+              >
+                {categories.map((category) => (
+                  <MenuItem key={category.value} value={category.value}>
+                    {category.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} md={1}>
+            <FormControl fullWidth>
+              <Button
+                fullWidth
+                size="large"
+                variant="contained"
+                onClick={handleClickSearchButton}
+              >
+                Search
+              </Button>
+            </FormControl>
+          </Grid>
+        </Grid>
+      </Box>
+    </Container>
   );
 };
 export default SearchBar;

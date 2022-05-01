@@ -1,6 +1,6 @@
 const db = require("../model");
 const Budget = db.budget;
-const Op = db.Sequelize;
+const Op = db.Sequelize.Op;
 const sequelize = db.sequelize;
 
 exports.insertBudget = async (request, response) => {
@@ -71,18 +71,6 @@ exports.getBudgetsByCondition = async (request, response) => {
   try {
     const title = request.query.title;
     const category = request.query.category;
-    console.log(typeof title);
-    if ((!title || title) && category === "ALL") {
-      try {
-        const budgets = await Budget.findAll();
-        response.send(budgets);
-      } catch (error) {
-        response.status(500).send({
-          message: error.message,
-        });
-      }
-      return;
-    }
     const titleCondition = title
       ? { title: { [Op.like]: `%${title}%` } }
       : null;
@@ -97,8 +85,9 @@ exports.getBudgetsByCondition = async (request, response) => {
     });
     response.status(200).send(budgets);
   } catch (error) {
+    console.log(error);
     response.status(500).send({
-      message: `Cannot find budget.`,
+      message: error,
     });
   }
 };

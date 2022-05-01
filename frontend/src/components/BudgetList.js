@@ -12,15 +12,26 @@ import {
   IconButton,
 } from "@mui/material";
 import SearchBar from "./SearchBar";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
+import DeleteModal from "./DeleteModal";
 export const BudgetList = () => {
   const [budgets, setBudgets] = useState([]);
+  const [dialog, setDialog] = useState({
+    message: "",
+    show: false,
+  });
+  const [deleteItemId, setDeleteItemId] = useState(null);
 
   useEffect(() => {
     getBudgets();
   }, []);
+
+  const refreshList = () => {
+    getBudgets();
+  };
 
   const getBudgets = async () => {
     try {
@@ -42,9 +53,40 @@ export const BudgetList = () => {
       console.log(error);
     }
   };
+  const handleDialog = (message, show) => {
+    setDialog({
+      message,
+      show,
+    });
+  };
+  const areUSureDelete = (choose) => {
+    if (choose) {
+      deleteItem();
+      handleDialog("", false);
+    } else {
+      handleDialog("", false);
+    }
+  };
+  const deleteItem = async () => {
+    try {
+      await budgetApi.delete(deleteItemId);
+      refreshList();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleDelete = (id) => {
+    handleDialog("Are you sure you want to delete budget item?", true);
+    setDeleteItemId(id);
+  };
 
   return (
     <Container maxWidth="xl">
+      <DeleteModal
+        show={dialog.show}
+        onDialog={areUSureDelete}
+        message={dialog.message}
+      />
       <SearchBar onBudgetChange={searchBudgets} />
       <TableContainer sx={{ maxHeight: "1000px" }} component={Paper}>
         <Table stickyHeader aria-label="simple table">
@@ -73,7 +115,11 @@ export const BudgetList = () => {
                   <IconButton aria-label="delete" xs={{ mr: 3 }}>
                     <FontAwesomeIcon icon={faPen} />
                   </IconButton>
-                  <IconButton aria-label="delete" xs={{ mr: 3 }}>
+                  <IconButton
+                    aria-label="delete"
+                    xs={{ mr: 3 }}
+                    onClick={() => handleDelete(budget.id)}
+                  >
                     <FontAwesomeIcon icon={faTrash} />
                   </IconButton>
                 </TableCell>

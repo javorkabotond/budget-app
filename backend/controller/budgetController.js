@@ -5,6 +5,7 @@ const sequelize = db.sequelize;
 
 exports.insertBudget = async (request, response) => {
   try {
+    console.log(request.body);
     const { title, descreption, amount, category, date } = request.body;
     if (!title || !descreption || !amount || !category || !date) {
       response.status(400).send({
@@ -59,7 +60,7 @@ exports.getBudgetById = async (request, response) => {
   try {
     const id = request.params.id;
     const budget = await Budget.findByPk(id);
-    response.send({ budget: budget });
+    response.send(budget);
   } catch (error) {
     response.status(404).send({
       message: `Cannot find budget with id: .`,

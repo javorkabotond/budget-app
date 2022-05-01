@@ -24,7 +24,7 @@ export const BudgetList = () => {
     show: false,
   });
   const [deleteItemId, setDeleteItemId] = useState(null);
-
+  const [updateItem, setUpdateItem] = useState(null);
   useEffect(() => {
     getBudgets();
   }, []);
@@ -80,6 +80,15 @@ export const BudgetList = () => {
     setDeleteItemId(id);
   };
 
+  const handleUpdate = async (id) => {
+    try {
+      const budget = await budgetApi.getById(id);
+      setUpdateItem(budget);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Container maxWidth="xl">
       <DeleteModal
@@ -112,7 +121,11 @@ export const BudgetList = () => {
                 <TableCell>{budget.category}</TableCell>
                 <TableCell>{budget.date}</TableCell>
                 <TableCell align="center">
-                  <IconButton aria-label="delete" xs={{ mr: 3 }}>
+                  <IconButton
+                    aria-label="update"
+                    xs={{ mr: 3 }}
+                    onClick={() => handleUpdate(budget.id)}
+                  >
                     <FontAwesomeIcon icon={faPen} />
                   </IconButton>
                   <IconButton

@@ -14,14 +14,14 @@ function App() {
   });
   return (
     <div className="App">
-      {/* <ThemeProvider theme={theme}> */}
-      <ResponsiveAppBar />
-      <Routes>
-        <Route path="/" element={<BudgetList />}></Route>
-        <Route path="/add" element={<AddBudget />}></Route>
-        <Route path="/chart" element={<Chart />}></Route>
-      </Routes>
-      {/* </ThemeProvider> */}
+      <ThemeProvider theme={theme}>
+        <ResponsiveAppBar />
+        <Routes>
+          <Route path="/" element={<BudgetList />}></Route>
+          <Route path="/add" element={<AddBudget />}></Route>
+          <Route path="/chart" element={<Chart />}></Route>
+        </Routes>
+      </ThemeProvider>
     </div>
   );
 }

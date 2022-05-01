@@ -16,9 +16,10 @@ export default {
       },
     });
   },
+  update(query) {
+    return http.put(`/budget/${query.id}`, query);
+  },
   save(query) {
-    console.log(query);
-
     return http.post(`/create`, query);
   },
   delete(id) {

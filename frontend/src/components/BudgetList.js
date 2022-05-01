@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import budgetApi from "../api/budgetApi";
+import { useNavigate } from "react-router-dom";
+
 import {
   TableContainer,
   Table,
@@ -24,7 +26,7 @@ export const BudgetList = () => {
     show: false,
   });
   const [deleteItemId, setDeleteItemId] = useState(null);
-  const [updateItem, setUpdateItem] = useState(null);
+  const navigate = useNavigate();
   useEffect(() => {
     getBudgets();
   }, []);
@@ -82,8 +84,9 @@ export const BudgetList = () => {
 
   const handleUpdate = async (id) => {
     try {
-      const budget = await budgetApi.getById(id);
-      setUpdateItem(budget);
+      // const budget = await budgetApi.getById(id);
+      // setUpdateItem(budget);
+      navigate("/add", { state: { id: id } });
     } catch (error) {
       console.log(error);
     }

@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   Container,
   Button,
@@ -35,6 +34,26 @@ const AddBudget = () => {
   const [category, setCategory] = useState("");
   const [date, setDate] = useState(new Date());
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state !== null) {
+      getBudgetbyId(location.state.id);
+    }
+  }, []);
+
+  const getBudgetbyId = async (id) => {
+    try {
+      const budget = await budgetApi.getById(id);
+      setTitle(budget.data.title);
+      setDescreption(budget.data.descreption);
+      setAmount(budget.data.amount);
+      setCategory(budget.data.category);
+      setDate(new Date());
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,11 +63,22 @@ const AddBudget = () => {
     query.amount = amount;
     query.category = category;
     query.date = date;
-    try {
-      await budgetApi.save(query);
-      navigate("/", { replace: true });
-    } catch (error) {
-      console.log("Hiba", error);
+
+    if (location.state === null) {
+      try {
+        await budgetApi.save(query);
+        navigate("/", { replace: true });
+      } catch (error) {
+        console.log("Hiba", error);
+      }
+    } else {
+      try {
+        query.id = location.state.id;
+        await budgetApi.update(query);
+        navigate("/", { replace: true });
+      } catch (error) {
+        console.log("Hiba", error);
+      }
     }
   };
   return (
@@ -109,7 +139,6 @@ const AddBudget = () => {
                   type="submit"
                   variant="contained"
                   color="primary"
-                  type="submit"
                 >
                   Add
                 </Button>

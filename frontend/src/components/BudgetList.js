@@ -8,8 +8,13 @@ import {
   TableRow,
   TableCell,
   Paper,
+  Container,
+  IconButton,
 } from "@mui/material";
 import SearchBar from "./SearchBar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
 export const BudgetList = () => {
   const [budgets, setBudgets] = useState([]);
 
@@ -28,7 +33,6 @@ export const BudgetList = () => {
 
   const searchBudgets = async (selectTitle, selectCategory) => {
     try {
-      console.log(selectTitle, selectCategory);
       let query = {};
       query.title = selectTitle;
       query.category = selectCategory;
@@ -40,9 +44,9 @@ export const BudgetList = () => {
   };
 
   return (
-    <div>
+    <Container maxWidth="xl">
       <SearchBar onBudgetChange={searchBudgets} />
-      <TableContainer sx={{ maxHeight: "300px" }} component={Paper}>
+      <TableContainer sx={{ maxHeight: "1000px" }} component={Paper}>
         <Table stickyHeader aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -50,7 +54,8 @@ export const BudgetList = () => {
               <TableCell>Descreption</TableCell>
               <TableCell>Amount</TableCell>
               <TableCell>Category</TableCell>
-              <TableCell align="center">Date</TableCell>
+              <TableCell>Date</TableCell>
+              <TableCell align="center">Methods</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -63,13 +68,21 @@ export const BudgetList = () => {
                 <TableCell>{budget.descreption}</TableCell>
                 <TableCell>{budget.amount}</TableCell>
                 <TableCell>{budget.category}</TableCell>
-                <TableCell align="center">{budget.date}</TableCell>
+                <TableCell>{budget.date}</TableCell>
+                <TableCell align="center">
+                  <IconButton aria-label="delete" xs={{ mr: 3 }}>
+                    <FontAwesomeIcon icon={faPen} />
+                  </IconButton>
+                  <IconButton aria-label="delete" xs={{ mr: 3 }}>
+                    <FontAwesomeIcon icon={faTrash} />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </Container>
   );
 };
 

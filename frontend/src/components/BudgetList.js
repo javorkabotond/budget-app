@@ -38,10 +38,38 @@ export const BudgetList = () => {
   const getBudgets = async () => {
     try {
       const response = await budgetApi.getAll();
-      setBudgets(response.data);
+      const data = response.data;
+      data.map((budget) => {
+        budget.category = setCategory(budget.category);
+        budget.date = setDate(budget.date);
+      });
+      setBudgets(data);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const setCategory = (category) => {
+    switch (category) {
+      case "OTHER":
+        category = "Other";
+        break;
+      case "SHOP":
+        category = "Shop";
+        break;
+      case "TRANSFER":
+        category = "Transfer";
+        break;
+      default:
+        break;
+    }
+    return category;
+  };
+
+  const setDate = (date) => {
+    const budgetDate = new Date(date);
+    const dateForm = budgetDate.toJSON().slice(0, 10).replace(/-/g, "-");
+    return dateForm;
   };
 
   const searchBudgets = async (selectTitle, selectCategory) => {

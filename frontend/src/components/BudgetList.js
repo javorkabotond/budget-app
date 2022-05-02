@@ -39,7 +39,7 @@ export const BudgetList = () => {
     try {
       const response = await budgetApi.getAll();
       const data = response.data;
-      data.map((budget) => {
+      data.forEach((budget) => {
         budget.category = setCategory(budget.category);
         budget.date = setDate(budget.date);
       });

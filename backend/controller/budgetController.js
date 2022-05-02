@@ -5,7 +5,6 @@ const sequelize = db.sequelize;
 
 exports.insertBudget = async (request, response) => {
   try {
-    console.log(request.body);
     const { title, descreption, amount, category, date } = request.body;
     if (!title || !descreption || !amount || !category || !date) {
       response.status(400).send({
